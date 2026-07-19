@@ -1,26 +1,201 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
+/* Class-based dark mode (matches next-themes attribute="class"). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---------------------------------------------------------------------------
+   Design tokens. Raw semantic variables live in :root / .dark and are mapped
+   into Tailwind via @theme inline so `bg-*`/`text-*` utilities flip with .dark.
+   Palette: slate neutrals + one indigo accent (Linear-inspired), Todoist-style
+   priority colors. Values are hex; opacity modifiers resolve via color-mix.
+--------------------------------------------------------------------------- */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --radius: 0.625rem;
+
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+
+  --primary: #6366f1;
+  --primary-foreground: #ffffff;
+  --secondary: #f1f5f9;
+  --secondary-foreground: #0f172a;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --accent: #eef2ff;
+  --accent-foreground: #4338ca;
+
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  --success: #16a34a;
+  --success-foreground: #ffffff;
+  --warning: #d97706;
+  --warning-foreground: #ffffff;
+
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #6366f1;
+
+  /* Priority scale (color + label + icon are always paired in the UI). */
+  --priority-low: #64748b;
+  --priority-medium: #2563eb;
+  --priority-high: #d97706;
+  --priority-urgent: #dc2626;
+
+  --chart-1: #6366f1;
+  --chart-2: #0ea5e9;
+  --chart-3: #10b981;
+  --chart-4: #f59e0b;
+  --chart-5: #ec4899;
+
+  --sidebar: #ffffff;
+  --sidebar-foreground: #0f172a;
+  --sidebar-primary: #6366f1;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f1f5f9;
+  --sidebar-accent-foreground: #0f172a;
+  --sidebar-border: #e2e8f0;
+  --sidebar-ring: #6366f1;
+}
+
+.dark {
+  --background: #0b0f19;
+  --foreground: #e2e8f0;
+  --card: #111725;
+  --card-foreground: #e2e8f0;
+  --popover: #111725;
+  --popover-foreground: #e2e8f0;
+
+  --primary: #818cf8;
+  --primary-foreground: #0b0f19;
+  --secondary: #1a2233;
+  --secondary-foreground: #e2e8f0;
+  --muted: #1a2233;
+  --muted-foreground: #94a3b8;
+  --accent: #1e2740;
+  --accent-foreground: #c7d2fe;
+
+  --destructive: #f87171;
+  --destructive-foreground: #0b0f19;
+  --success: #22c55e;
+  --success-foreground: #04140a;
+  --warning: #f59e0b;
+  --warning-foreground: #1a1205;
+
+  --border: #232c3d;
+  --input: #2a3446;
+  --ring: #818cf8;
+
+  --priority-low: #94a3b8;
+  --priority-medium: #60a5fa;
+  --priority-high: #fbbf24;
+  --priority-urgent: #f87171;
+
+  --chart-1: #818cf8;
+  --chart-2: #38bdf8;
+  --chart-3: #34d399;
+  --chart-4: #fbbf24;
+  --chart-5: #f472b6;
+
+  --sidebar: #0e1420;
+  --sidebar-foreground: #e2e8f0;
+  --sidebar-primary: #818cf8;
+  --sidebar-primary-foreground: #0b0f19;
+  --sidebar-accent: #1a2233;
+  --sidebar-accent-foreground: #e2e8f0;
+  --sidebar-border: #232c3d;
+  --sidebar-ring: #818cf8;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-priority-low: var(--priority-low);
+  --color-priority-medium: var(--priority-medium);
+  --color-priority-high: var(--priority-high);
+  --color-priority-urgent: var(--priority-urgent);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "cv11", "ss01";
+  }
+  /* Tabular figures for data/counts to prevent layout shift. */
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+  ::selection {
+    background: color-mix(in oklab, var(--primary) 24%, transparent);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
