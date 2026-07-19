@@ -114,6 +114,18 @@ export async function getTaskStats(userId: string): Promise<TaskStats> {
   };
 }
 
+export async function getTasksInRange(
+  userId: string,
+  start: Date,
+  end: Date,
+): Promise<TaskWithRelations[]> {
+  return prisma.task.findMany({
+    where: { userId, dueDate: { gte: start, lte: end } },
+    include: taskInclude,
+    orderBy: [{ dueDate: "asc" }, { priority: "desc" }],
+  });
+}
+
 export async function getUpcomingTasks(
   userId: string,
   limit = 5,
