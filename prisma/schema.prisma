@@ -1,7 +1,6 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
+// TaskFlow schema — Next.js 16 + Prisma 7 (prisma-client generator) + MySQL.
+// Client is generated to src/generated/prisma and requires a driver adapter at runtime.
+// Learn more: https://pris.ly/d/prisma-schema
 
 generator client {
   provider = "prisma-client"
@@ -12,51 +11,134 @@ datasource db {
   provider = "mysql"
 }
 
+// ---------------------------------------------------------------------------
+// Auth.js (NextAuth v5) models — canonical Prisma adapter shape, MySQL-tuned.
+// ---------------------------------------------------------------------------
+
 model User {
-  id         Int        @id @default(autoincrement())
-  email      String     @unique
-  name       String?
-  password   String
-  todos      Todo[]
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  passwordHash  String? // null for OAuth-only users; set for Credentials users
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts   Account[]
+  sessions   Session[]
+  tasks      Task[]
   categories Category[]
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
+  tags       Tag[]
 }
 
-model Category {
-  id    Int    @id @default(autoincrement())
-  name  String
-  color String @default("#3b82f6")
-  todos Todo[]
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
 
-  userId Int
-  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([userId, name])
+  @@unique([provider, providerAccountId])
+  @@index([userId])
 }
 
-model Todo {
-  id          Int       @id @default(autoincrement())
-  title       String
-  description String?   @db.Text
-  completed   Boolean   @default(false)
-  priority    Priority  @default(MEDIUM)
-  dueDate     DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
 
-  userId Int
-  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  categoryId Int?
-  category   Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
-  @@index([categoryId])
 }
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ---------------------------------------------------------------------------
+// Product models
+// ---------------------------------------------------------------------------
 
 enum Priority {
   LOW
   MEDIUM
   HIGH
+  URGENT
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  DONE
+}
+
+model Category {
+  id        String   @id @default(cuid())
+  name      String
+  color     String   @default("#6366f1")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tasks  Task[]
+
+  @@unique([userId, name])
+  @@index([userId])
+}
+
+model Tag {
+  id        String   @id @default(cuid())
+  name      String
+  color     String   @default("#64748b")
+  createdAt DateTime @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tasks  Task[]
+
+  @@unique([userId, name])
+  @@index([userId])
+}
+
+model Task {
+  id          String     @id @default(cuid())
+  title       String
+  description String?    @db.Text
+  status      TaskStatus @default(TODO)
+  priority    Priority   @default(MEDIUM)
+  dueDate     DateTime?
+  position    Int        @default(0)
+  completedAt DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  categoryId String?
+  category   Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+
+  tags Tag[]
+
+  @@index([userId])
+  @@index([categoryId])
+  @@index([userId, status])
+  @@index([userId, dueDate])
 }
