@@ -16,6 +16,8 @@ const prisma = new PrismaClient({ adapter });
 
 const DEMO_EMAIL = "demo@taskflow.app";
 const DEMO_PASSWORD = "demo1234";
+// Fixed id so re-seeding keeps the same user and never orphans a live session.
+const DEMO_USER_ID = "usr_demo_taskflow";
 
 function daysFromNow(n: number): Date {
   const d = new Date();
@@ -31,6 +33,7 @@ async function main() {
   const passwordHash = await bcrypt.hash(DEMO_PASSWORD, 12);
   const user = await prisma.user.create({
     data: {
+      id: DEMO_USER_ID,
       name: "Maya Okonkwo",
       email: DEMO_EMAIL,
       passwordHash,
@@ -88,7 +91,7 @@ async function main() {
       tags: ["bug", "follow-up"],
     },
     {
-      title: "Review pull request #482 — auth session refactor",
+      title: "Review pull request #482 for the auth session refactor",
       status: TaskStatus.TODO,
       priority: Priority.MEDIUM,
       dueDate: daysFromNow(0),
@@ -112,7 +115,7 @@ async function main() {
       category: "Health",
     },
     {
-      title: "Morning run — 5k",
+      title: "Morning 5k run",
       status: TaskStatus.DONE,
       priority: Priority.LOW,
       dueDate: daysFromNow(-1),
