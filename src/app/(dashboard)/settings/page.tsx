@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import { requireUser } from "@/lib/dal";
 import { prisma } from "@/lib/prisma";
+import { getCategories } from "@/server/queries/tasks";
 import { PageHeader } from "@/components/dashboard/page-header";
 import {
   Card,
@@ -13,15 +14,19 @@ import {
 import { ProfileForm } from "@/components/settings/profile-form";
 import { PasswordForm } from "@/components/settings/password-form";
 import { AppearanceForm } from "@/components/settings/appearance-form";
+import { ProjectsManager } from "@/components/settings/projects-manager";
 
 export const metadata: Metadata = { title: "Settings" };
 
 export default async function SettingsPage() {
   const user = await requireUser();
-  const record = await prisma.user.findUnique({
-    where: { id: user.id },
-    select: { name: true, email: true, passwordHash: true },
-  });
+  const [record, categories] = await Promise.all([
+    prisma.user.findUnique({
+      where: { id: user.id },
+      select: { name: true, email: true, passwordHash: true },
+    }),
+    getCategories(user.id),
+  ]);
 
   return (
     <div className="flex max-w-3xl flex-col gap-6">
@@ -61,6 +66,18 @@ export default async function SettingsPage() {
             <PasswordForm />
           </CardContent>
         )}
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Projects</CardTitle>
+          <CardDescription>
+            Group tasks into projects and assign each one a color.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ProjectsManager categories={categories} />
+        </CardContent>
       </Card>
 
       <Card>
