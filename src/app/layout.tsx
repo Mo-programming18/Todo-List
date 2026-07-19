@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "TaskFlow — Organize your work, calmly",
+    default: "TaskFlow · Organize your work, calmly",
     template: "%s · TaskFlow",
   },
   description:

@@ -23,7 +23,7 @@ export const authConfig = {
     signIn: "/login",
   },
   callbacks: {
-    // Runs in the proxy (edge-capable) layer — keep it DB-free.
+    // Runs in the proxy (edge-capable) layer; keep it DB-free.
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
       const { pathname } = nextUrl;

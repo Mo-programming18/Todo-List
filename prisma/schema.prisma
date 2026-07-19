@@ -1,4 +1,4 @@
-// TaskFlow schema — Next.js 16 + Prisma 7 (prisma-client generator) + MySQL.
+// TaskFlow schema. Next.js 16 + Prisma 7 (prisma-client generator) + MySQL.
 // Client is generated to src/generated/prisma and requires a driver adapter at runtime.
 // Learn more: https://pris.ly/d/prisma-schema
 
@@ -12,7 +12,7 @@ datasource db {
 }
 
 // ---------------------------------------------------------------------------
-// Auth.js (NextAuth v5) models — canonical Prisma adapter shape, MySQL-tuned.
+// Auth.js (NextAuth v5) models. Canonical Prisma adapter shape, MySQL-tuned.
 // ---------------------------------------------------------------------------
 
 model User {

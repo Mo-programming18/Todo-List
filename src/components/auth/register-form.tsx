@@ -41,7 +41,7 @@ export function RegisterForm({
       toast.error(result.error);
       return;
     }
-    // Account created — sign the user straight in.
+    // Account created; sign the user straight in.
     const signInResult = await signIn("credentials", {
       email: values.email,
       password: values.password,
