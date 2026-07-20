@@ -5,12 +5,11 @@ export const taskFormSchema = z.object({
   description: z
     .string()
     .trim()
-    .max(2000, "Description is too long")
-    .optional()
-    .or(z.literal("")),
+    .min(1, "Description is required")
+    .max(2000, "Description is too long"),
   status: z.enum(["TODO", "IN_PROGRESS", "DONE"]),
   priority: z.enum(["LOW", "MEDIUM", "HIGH", "URGENT"]),
-  dueDate: z.string().optional().or(z.literal("")),
+  dueDate: z.string().trim().min(1, "Due date is required"),
   categoryId: z.string().optional().or(z.literal("")),
   tags: z.array(z.string().trim().min(1).max(24)).max(20),
 });

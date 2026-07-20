@@ -91,8 +91,13 @@ export function RegisterForm() {
             aria-invalid={!!errors.password}
             {...register("password")}
           />
-          {errors.password && (
+          {errors.password ? (
             <p className="text-xs text-destructive">{errors.password.message}</p>
+          ) : (
+            <p className="text-xs text-muted-foreground">
+              Use 8+ characters with upper &amp; lowercase letters, a number, and
+              a special character.
+            </p>
           )}
         </div>
 

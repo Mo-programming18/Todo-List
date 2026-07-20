@@ -2,6 +2,7 @@
 
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -55,7 +56,10 @@ export function TaskForm({
   return (
     <form
       id={TASK_FORM_ID}
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(onSubmit, (formErrors) => {
+        const firstError = Object.values(formErrors)[0];
+        toast.error(firstError?.message ?? "Please fix the highlighted fields.");
+      })}
       className="flex flex-col gap-4"
       noValidate
     >
@@ -77,10 +81,16 @@ export function TaskForm({
         <Label htmlFor="task-description">Description</Label>
         <Textarea
           id="task-description"
-          placeholder="Add more detail (optional)"
+          placeholder="Add more detail"
           rows={3}
+          aria-invalid={!!errors.description}
           {...register("description")}
         />
+        {errors.description && (
+          <p className="text-xs text-destructive">
+            {errors.description.message}
+          </p>
+        )}
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -135,7 +145,15 @@ export function TaskForm({
 
         <div className="flex flex-col gap-2">
           <Label htmlFor="task-due">Due date</Label>
-          <Input id="task-due" type="date" {...register("dueDate")} />
+          <Input
+            id="task-due"
+            type="date"
+            aria-invalid={!!errors.dueDate}
+            {...register("dueDate")}
+          />
+          {errors.dueDate && (
+            <p className="text-xs text-destructive">{errors.dueDate.message}</p>
+          )}
         </div>
 
         <div className="flex flex-col gap-2">

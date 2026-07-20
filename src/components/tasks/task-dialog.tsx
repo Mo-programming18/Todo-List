@@ -80,7 +80,7 @@ export function TaskDialog({
           <DialogDescription>
             {isEdit
               ? "Update the details of your task."
-              : "Add a task to your list. Only a title is required."}
+              : "Add a task to your list. A title and description are required."}
           </DialogDescription>
         </DialogHeader>
 
