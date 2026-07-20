@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { NAV_ITEMS } from "@/lib/nav";
@@ -16,7 +15,7 @@ export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
           pathname === item.href ||
           (item.href !== "/dashboard" && pathname.startsWith(item.href));
         return (
-          <Link
+          <a
             key={item.href}
             href={item.href}
             onClick={onNavigate}
@@ -30,7 +29,7 @@ export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
           >
             <item.icon className="size-4 shrink-0" strokeWidth={2} />
             {item.label}
-          </Link>
+          </a>
         );
       })}
     </nav>

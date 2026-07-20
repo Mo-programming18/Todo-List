@@ -8,7 +8,7 @@
 | Decision | Choice |
 |---|---|
 | Scope | Full product, phased delivery with a commit per phase |
-| Auth | Auth.js v5 — Credentials (email + password, bcrypt) + optional GitHub/Google OAuth |
+| Auth | Auth.js v5 — Credentials (email + password, bcrypt) |
 | Visual anchor | Linear-inspired refined neutrals + one indigo accent; Todoist-style priority color coding |
 | Theme | Light + dark mode, both designed from the start (class strategy) |
 | Density | Comfortable-dense (dashboard) |

@@ -11,6 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { AvatarUpload } from "@/components/settings/avatar-upload";
 import { ProfileForm } from "@/components/settings/profile-form";
 import { PasswordForm } from "@/components/settings/password-form";
 import { AppearanceForm } from "@/components/settings/appearance-form";
@@ -23,7 +24,7 @@ export default async function SettingsPage() {
   const [record, categories] = await Promise.all([
     prisma.user.findUnique({
       where: { id: user.id },
-      select: { name: true, email: true, passwordHash: true },
+      select: { name: true, email: true, image: true, passwordHash: true },
     }),
     getCategories(user.id),
   ]);
@@ -39,10 +40,15 @@ export default async function SettingsPage() {
         <CardHeader>
           <CardTitle>Profile</CardTitle>
           <CardDescription>
-            Update your name and the email you sign in with.
+            Update your photo, name, and the email you sign in with.
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="flex flex-col gap-6">
+          <AvatarUpload
+            name={record?.name}
+            email={record?.email}
+            image={record?.image}
+          />
           <ProfileForm
             defaultValues={{
               name: record?.name ?? "",

@@ -175,6 +175,8 @@
   html {
     -webkit-text-size-adjust: 100%;
     scroll-behavior: smooth;
+    /* Offset anchor targets so they clear the fixed navbar. */
+    scroll-padding-top: 5.5rem;
   }
   body {
     @apply bg-background text-foreground antialiased;

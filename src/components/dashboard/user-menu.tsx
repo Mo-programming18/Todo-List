@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { signOut } from "next-auth/react";
 import { LogOut, Settings, UserRound } from "lucide-react";
 
@@ -51,16 +50,16 @@ export function UserMenu({ user }: { user: MenuUser }) {
         </div>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link href="/settings">
+          <a href="/settings">
             <UserRound />
             Profile
-          </Link>
+          </a>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link href="/settings">
+          <a href="/settings">
             <Settings />
             Settings
-          </Link>
+          </a>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem

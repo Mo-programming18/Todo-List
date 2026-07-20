@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { useTheme } from "next-themes";
 import { Monitor, Moon, Sun } from "lucide-react";
 
@@ -12,10 +12,20 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+// Hydration-safe mount flag: `false` during SSR/first paint, `true` once the
+// client has hydrated — without calling setState inside an effect.
+const subscribe = () => () => {};
+function useHydrated() {
+  return useSyncExternalStore(
+    subscribe,
+    () => true,
+    () => false,
+  );
+}
+
 export function AppearanceForm() {
   const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+  const mounted = useHydrated();
 
   return (
     <div className="flex max-w-md items-center justify-between gap-4">

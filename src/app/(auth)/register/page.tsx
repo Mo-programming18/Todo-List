@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 
 import { RegisterForm } from "@/components/auth/register-form";
-import { getEnabledOAuthProviders } from "@/lib/auth-providers";
 
 export const metadata: Metadata = {
   title: "Create your account",
@@ -10,8 +8,6 @@ export const metadata: Metadata = {
 };
 
 export default function RegisterPage() {
-  const providers = getEnabledOAuthProviders();
-
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-2 text-center lg:text-left">
@@ -23,13 +19,13 @@ export default function RegisterPage() {
         </p>
       </div>
 
-      <RegisterForm oauthProviders={providers} />
+      <RegisterForm />
 
       <p className="text-center text-sm text-muted-foreground">
         Already have an account?{" "}
-        <Link href="/login" className="font-medium text-primary hover:underline">
+        <a href="/login" className="font-medium text-primary hover:underline">
           Sign in
-        </Link>
+        </a>
       </p>
     </div>
   );

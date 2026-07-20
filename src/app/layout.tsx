@@ -32,7 +32,13 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable}`}
     >
-      <body className="min-h-dvh bg-background text-foreground">
+      {/* suppressHydrationWarning: browser extensions (e.g. ColorZilla adds
+          `cz-shortcut-listen`) inject attributes onto <body> before React
+          hydrates, which otherwise trips a benign hydration mismatch. */}
+      <body
+        suppressHydrationWarning
+        className="min-h-dvh bg-background text-foreground"
+      >
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

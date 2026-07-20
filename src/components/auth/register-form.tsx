@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 
@@ -12,17 +11,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PasswordInput } from "@/components/ui/password-input";
-import { OAuthButtons } from "@/components/auth/oauth-buttons";
 import { registerUser } from "@/server/actions/auth";
 import { registerSchema, type RegisterInput } from "@/lib/validations/auth";
-import type { OAuthProvider } from "@/lib/auth-providers";
 
-export function RegisterForm({
-  oauthProviders,
-}: {
-  oauthProviders: OAuthProvider[];
-}) {
-  const router = useRouter();
+export function RegisterForm() {
   const [pending, setPending] = useState(false);
   const {
     register,
@@ -50,25 +42,16 @@ export function RegisterForm({
     if (signInResult?.error) {
       setPending(false);
       toast.success("Account created. Please sign in.");
-      router.push("/login");
+      window.location.assign("/login");
       return;
     }
     toast.success("Welcome to TaskFlow.");
-    router.push("/dashboard");
-    router.refresh();
+    // Full page load so the server re-renders with the new session (MPA).
+    window.location.assign("/dashboard");
   }
 
   return (
     <div className="flex flex-col gap-5">
-      <OAuthButtons providers={oauthProviders} />
-      {oauthProviders.length > 0 && (
-        <div className="flex items-center gap-3 text-xs text-muted-foreground">
-          <span className="h-px flex-1 bg-border" />
-          or sign up with email
-          <span className="h-px flex-1 bg-border" />
-        </div>
-      )}
-
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4" noValidate>
         <div className="flex flex-col gap-2">
           <Label htmlFor="name">Full name</Label>

@@ -1,24 +1,14 @@
 import type { NextAuthConfig } from "next-auth";
-import GitHub from "next-auth/providers/github";
-import Google from "next-auth/providers/google";
 
-// Edge-safe base config: OAuth provider metadata + the route-protection
-// callback. NO database, NO bcrypt (those live in auth.ts, Node-only).
-// OAuth providers are included only when their credentials are present, so the
-// app runs cleanly with email/password alone.
-const oauthProviders: NextAuthConfig["providers"] = [];
-if (process.env.AUTH_GITHUB_ID && process.env.AUTH_GITHUB_SECRET) {
-  oauthProviders.push(GitHub);
-}
-if (process.env.AUTH_GOOGLE_ID && process.env.AUTH_GOOGLE_SECRET) {
-  oauthProviders.push(Google);
-}
+// Edge-safe base config: the route-protection callback only. NO database,
+// NO bcrypt (those live in auth.ts, Node-only). The app authenticates with
+// email/password (Credentials) alone — the provider is registered in auth.ts.
 
 const PUBLIC_ROUTES = new Set(["/"]);
 const AUTH_ROUTES = new Set(["/login", "/register"]);
 
 export const authConfig = {
-  providers: oauthProviders,
+  providers: [],
   pages: {
     signIn: "/login",
   },

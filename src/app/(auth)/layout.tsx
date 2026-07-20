@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Check } from "lucide-react";
 
 import { Brand } from "@/components/brand";
@@ -17,9 +16,9 @@ export default function AuthLayout({
   return (
     <div className="grid min-h-dvh lg:grid-cols-[1.05fr_1fr]">
       <aside className="relative hidden flex-col justify-between overflow-hidden bg-primary p-10 text-primary-foreground lg:flex">
-        <Link href="/" className="w-fit">
+        <a href="/" className="w-fit">
           <Brand invert className="text-primary-foreground" />
-        </Link>
+        </a>
 
         <div className="max-w-md">
           <h2 className="text-3xl font-semibold tracking-tight text-balance">
@@ -44,9 +43,9 @@ export default function AuthLayout({
 
       <div className="flex flex-col">
         <header className="flex items-center p-6 lg:hidden">
-          <Link href="/">
+          <a href="/">
             <Brand />
-          </Link>
+          </a>
         </header>
         <div className="flex flex-1 items-center justify-center p-6 sm:p-10">
           <div className="w-full max-w-sm">{children}</div>

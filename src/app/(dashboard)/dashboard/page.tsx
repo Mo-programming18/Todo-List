@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import {
   AlertTriangle,
   CalendarClock,
@@ -169,9 +168,9 @@ export default async function DashboardPage() {
 
       <p className="text-sm text-muted-foreground">
         Head to{" "}
-        <Link href="/tasks" className="font-medium text-primary hover:underline">
+        <a href="/tasks" className="font-medium text-primary hover:underline">
           Tasks
-        </Link>{" "}
+        </a>{" "}
         to manage everything on your list.
       </p>
     </div>

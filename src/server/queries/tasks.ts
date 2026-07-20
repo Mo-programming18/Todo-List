@@ -28,6 +28,9 @@ function buildWhere(userId: string, filters: TaskFilters): Prisma.TaskWhereInput
   if (filters.tagId && filters.tagId !== "all")
     where.tags = { some: { id: filters.tagId } };
   if (filters.search?.trim()) {
+    // Coarse pre-filter. MySQL's default collation makes `contains`
+    // case-insensitive, so this returns a superset; getTasks then narrows it to
+    // exact-case matches (Prisma's MySQL connector has no case-sensitive mode).
     const q = filters.search.trim();
     where.OR = [
       { title: { contains: q } },
@@ -60,11 +63,19 @@ export async function getTasks(
   userId: string,
   filters: TaskFilters = {},
 ): Promise<TaskWithRelations[]> {
-  return prisma.task.findMany({
+  const tasks = await prisma.task.findMany({
     where: buildWhere(userId, filters),
     include: taskInclude,
     orderBy: buildOrderBy(filters.sort),
   });
+
+  // Enforce case-sensitive search: the DB filter above is case-insensitive, so
+  // keep only the tasks whose title or description contains the term verbatim.
+  const q = filters.search?.trim();
+  if (!q) return tasks;
+  return tasks.filter(
+    (task) => task.title.includes(q) || (task.description?.includes(q) ?? false),
+  );
 }
 
 export async function getTaskById(

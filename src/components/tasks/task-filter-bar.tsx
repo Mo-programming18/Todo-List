@@ -41,6 +41,14 @@ export function TaskFilterBar({
 
   const [search, setSearch] = useState(searchParam);
 
+  // Keep the box in sync when the URL changes elsewhere (e.g. the navbar
+  // search) by adjusting state during render instead of in an effect.
+  const [prevSearchParam, setPrevSearchParam] = useState(searchParam);
+  if (searchParam !== prevSearchParam) {
+    setPrevSearchParam(searchParam);
+    setSearch(searchParam);
+  }
+
   const setParam = useCallback(
     (key: string, value: string) => {
       const next = new URLSearchParams(params.toString());
@@ -51,9 +59,6 @@ export function TaskFilterBar({
     },
     [params, pathname, router],
   );
-
-  // Keep the search box in sync when the URL changes elsewhere (e.g. navbar).
-  useEffect(() => setSearch(searchParam), [searchParam]);
 
   // Debounce search updates into the URL.
   useEffect(() => {

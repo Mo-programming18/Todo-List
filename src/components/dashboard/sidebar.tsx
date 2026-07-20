@@ -1,14 +1,12 @@
-import Link from "next/link";
-
 import { Brand } from "@/components/brand";
 import { SidebarNav } from "@/components/dashboard/sidebar-nav";
 
 export function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
   return (
     <div className="flex h-full flex-col gap-6 p-4">
-      <Link href="/dashboard" onClick={onNavigate} className="px-2 py-1">
+      <a href="/dashboard" onClick={onNavigate} className="px-2 py-1">
         <Brand />
-      </Link>
+      </a>
 
       <div className="px-2 text-[11px] font-medium tracking-wide text-muted-foreground uppercase">
         Workspace
