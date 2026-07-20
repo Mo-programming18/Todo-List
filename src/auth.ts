@@ -12,6 +12,9 @@ import { loginSchema } from "@/lib/validations/auth";
 // the Credentials provider.
 export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
+  // Netlify isn't in Auth.js's host auto-trust list (only Vercel/CF Pages), so
+  // without this the host check fails in production and /api/auth/* returns 500.
+  trustHost: true,
   // The adapter's PrismaClient type is nominally different from our custom
   // generated client but structurally compatible.
   adapter: PrismaAdapter(prisma as never),
@@ -28,6 +31,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         if (!parsed.success) return null;
 
         const { email, password } = parsed.data;
+        // email is already trimmed + lowercased by loginSchema.
         const user = await prisma.user.findUnique({ where: { email } });
         if (!user?.passwordHash) return null;
 

@@ -1,5 +1,15 @@
 import { z } from "zod";
 
+// Single source of truth for email normalization: trim + lowercase BEFORE
+// validation, so every consumer (login, register) receives a canonical value
+// and DB lookups/writes always agree on casing.
+export const emailSchema = z
+  .string()
+  .trim()
+  .toLowerCase()
+  .min(1, "Email is required")
+  .email("Enter a valid email");
+
 // Shared strong-password rules, reused by registration and password changes.
 export const strongPasswordSchema = z
   .string()
@@ -11,7 +21,7 @@ export const strongPasswordSchema = z
   .regex(/[^A-Za-z0-9]/, "Password must include a special character");
 
 export const loginSchema = z.object({
-  email: z.string().min(1, "Email is required").email("Enter a valid email"),
+  email: emailSchema,
   password: z.string().min(1, "Password is required"),
 });
 
@@ -20,7 +30,7 @@ export const registerSchema = z.object({
     .string()
     .min(2, "Name must be at least 2 characters")
     .max(60, "Name is too long"),
-  email: z.string().min(1, "Email is required").email("Enter a valid email"),
+  email: emailSchema,
   password: strongPasswordSchema,
 });
 
