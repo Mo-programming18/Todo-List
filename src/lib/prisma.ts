@@ -16,7 +16,13 @@ function createPrismaClient() {
     password: decodeURIComponent(url.password),
     database: url.pathname.slice(1),
     connectionLimit: 5,
-    ...(useSsl ? { ssl: { rejectUnauthorized: true } } : {}),
+    // The driver's default connect timeout (~1s) is too tight for hosted DBs
+    // (e.g. Railway's TCP proxy), which fails with "failed to create socket".
+    connectTimeout: 15_000,
+    // Managed MySQL providers terminate TLS with a self-signed cert, so we can
+    // encrypt the connection but not verify the chain (rejectUnauthorized: true
+    // throws SELF_SIGNED_CERT_IN_CHAIN).
+    ...(useSsl ? { ssl: { rejectUnauthorized: false } } : {}),
   });
   return new PrismaClient({ adapter });
 }
