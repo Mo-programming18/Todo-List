@@ -18,7 +18,7 @@ Verified against the local docs and npm. These differ from older conventions —
 - Animations: `@import "tw-animate-css";`.
 
 ## Auth.js v5 (`next-auth@beta`)
-- Install `next-auth@beta @auth/prisma-adapter bcryptjs @prisma/adapter-mariadb` with `--legacy-peer-deps` (peer range gap, not a runtime break).
+- Install `next-auth@beta @auth/prisma-adapter bcryptjs @prisma/adapter-pg` with `--legacy-peer-deps` (peer range gap, not a runtime break).
 - **Split config**: `auth.config.ts` (edge-safe: providers metadata + `authorized` callback, no DB/bcrypt) and `auth.ts` (Node: adapter + Credentials + bcrypt). `proxy.ts` imports only `auth.config`.
 - Credentials provider **requires `session.strategy = 'jwt'`**. Adapter still backs OAuth account linking + user table.
 - `PrismaAdapter(prisma)` takes the client instance — custom output path is irrelevant to it.
@@ -26,9 +26,9 @@ Verified against the local docs and npm. These differ from older conventions —
 - `passwordHash String?` on User (null for OAuth-only users).
 
 ## Prisma 7.8 (new `prisma-client` generator, custom output)
-- The generated client uses the **WASM client engine → a driver adapter is MANDATORY**. `new PrismaClient()` alone throws. For MySQL use `@prisma/adapter-mariadb` (`PrismaMariaDb`), passed as `new PrismaClient({ adapter })`.
+- The generated client uses the **WASM client engine → a driver adapter is MANDATORY**. `new PrismaClient()` alone throws. For PostgreSQL use `@prisma/adapter-pg` (`PrismaPg`), passed as `new PrismaClient({ adapter })`.
 - Import client/enums/types from `@/generated/prisma`. Enums are const objects (`Priority.HIGH`).
-- DB URL lives in `prisma.config.ts` `datasource.url` (not schema). CLI needs the `mysql://` scheme.
+- DB URL lives in `prisma.config.ts` `datasource.url` (not schema). CLI needs the `postgresql://` scheme.
 - `migrate dev`/`db push` **no longer auto-run `generate`** — run `prisma generate` separately. Add `postinstall: prisma generate`.
 - Seed command goes in `prisma.config.ts` `migrations.seed` (e.g. `tsx prisma/seed.ts`).
 - Keep `src/generated/prisma` gitignored.

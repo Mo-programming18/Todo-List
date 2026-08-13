@@ -1,7 +1,7 @@
 # TaskFlow — Design & Architecture Spec
 
 > A professional task-management SaaS. Portfolio-grade product, not a CRUD demo.
-> Stack: Next.js 16 (App Router) · React 19 · TypeScript · Tailwind v4 · shadcn-style components · Prisma 7 · MySQL · Auth.js v5.
+> Stack: Next.js 16 (App Router) · React 19 · TypeScript · Tailwind v4 · shadcn-style components · Prisma 7 · PostgreSQL · Auth.js v5.
 
 ## 1. Product decisions (locked)
 
